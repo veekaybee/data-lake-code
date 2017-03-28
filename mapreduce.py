@@ -24,12 +24,10 @@ def get_filenames():
 
 
 def get_data(filename):
-
 	"""
 	Pre-processes data in filename by stripping lines and commas out of words
-
 	:param a given file
-    """
+    	"""
 	words = []
 
 	with open(filename,'r') as f: 
@@ -41,10 +39,9 @@ def get_data(filename):
 
 
 def sumFileSize():
-
 	"""
 	Prints sum of filesize of files to be mapreduced
-    """
+    	"""
 
 	filesize = 0
 
@@ -58,12 +55,10 @@ def sumFileSize():
 
 
 def map_function(filename):
-
 	"""
 	Takes a list of sentences,splits, and sums up words per sentence
-
-    :param words: filename
-    """
+    	:param words: filename
+   	"""
 
 	sentences = get_data(filename)
 
@@ -80,9 +75,10 @@ def map_function(filename):
 	return wordCount
 
 def reduce_function(dict_list):
-	"""This function reduces a dictionary with mapped keys/values by summing values
-    :param words: List of words
-    """
+	"""
+	This function reduces a dictionary with mapped keys/values by summing values
+    	:param words: List of words
+    	"""
 	d = {}
 
 	for entry in dict_list:
@@ -96,11 +92,10 @@ def reduce_function(dict_list):
 	return d
 
 def show_items(mapreduce):
-	
-	"""Sorts values by descending order and prints them
-
-    :param mapreduce: Mapreduce dictionary
-    """
+	"""
+	Sorts values by descending order and prints them
+    	:param mapreduce: Mapreduce dictionary
+   	"""
 
 	sorted_items = sorted(mapreduce.items(), key=lambda x: x[1])
 	
@@ -109,11 +104,8 @@ def show_items(mapreduce):
 
 if __name__ == '__main__':
 	sumFileSize()
-
 	dicts = []
-
 	print("Processing textfiles...")
-	
 	pool= Pool(processes=5) 
 	result_set = pool.map(map_function, get_filenames(), chunksize=30)
 
