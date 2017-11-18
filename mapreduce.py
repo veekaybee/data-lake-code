@@ -13,6 +13,9 @@ from multiprocessing import Pool
 CWD = os.getcwd()  #current working directory 
 
 def get_filenames():
+	"""
+	Returns complete list of filenames
+    """
 
 	filenames = []
 
@@ -20,14 +23,15 @@ def get_filenames():
 		if filename.endswith(".txt"):
 			filenames.append(filename)
 	
-	return filenames
+	return(filenames)
 
 
 def get_data(filename):
 	"""
 	Pre-processes data in filename by stripping lines and commas out of words
 	:param a given file
-    	"""
+    """
+
 	words = []
 
 	with open(filename,'r') as f: 
@@ -35,7 +39,7 @@ def get_data(filename):
 			word = line.strip('\n').strip('\r').strip('.').strip(',').split(' ')
 			words.append(word)
 
-	return words
+	return(words)
 
 
 def sumFileSize():
@@ -72,7 +76,7 @@ def map_function(filename):
 				wordCount[word] = 1
 
 	print("Done Analyzing %s" % (filename))
-	return wordCount
+	return(wordCount)
 
 def reduce_function(dict_list):
 	"""
@@ -89,7 +93,7 @@ def reduce_function(dict_list):
 			except KeyError:
 				d[k] = v
 	
-	return d
+	return(d)
 
 def show_items(mapreduce):
 	"""
@@ -104,10 +108,20 @@ def show_items(mapreduce):
 
 if __name__ == '__main__':
 	sumFileSize()
-	dicts = []
+
 	print("Processing textfiles...")
+
+	#Single-thread
+	
+	# map = map_function(get_filenames())
+	# mr = reduce_function(map)
+	# show_items(mr)
+
+	#Multiprocessing
+
+	files = get_filenames()
 	pool= Pool(processes=5) 
-	result_set = pool.map(map_function, get_filenames(), chunksize=30)
+	result_set = pool.map(map_function, files, chunksize=30) #processing an iterated list of files
 
 	show_items(reduce_function(result_set))
 
