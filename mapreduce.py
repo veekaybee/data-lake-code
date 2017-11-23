@@ -86,13 +86,13 @@ def reduce_function(dict_list):
     """
 	d = {}
 
-	for entry in dict_list:
-		print("merging dictionary...")
-		for k, v in entry.items():
-			try:
-				d[k] += v
-			except KeyError:
-				d[k] = v
+
+	print("merging dictionary...")
+	for k, v in dict_list.items():
+		try:
+			d[k] += v
+		except KeyError:
+			d[k] = v
 	
 	return d 
 
@@ -113,11 +113,14 @@ if __name__ == '__main__':
 	print("Processing textfiles...")
 
 	#Single-thread
+
+	append_dict = {}
 	
 	files = get_filenames()
 
 	for filename in files: 
 		mapr = map_function(filename)
+		append_dict.update(mapr)
 	
 	mr = reduce_function(mapr)
 	
