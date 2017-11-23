@@ -23,7 +23,7 @@ def get_filenames():
 		if filename.endswith(".txt"):
 			filenames.append(filename)
 	
-	return(filenames)
+	return filenames 
 
 
 def get_data(filename):
@@ -39,7 +39,7 @@ def get_data(filename):
 			word = line.strip('\n').strip('\r').strip('.').strip(',').split(' ')
 			words.append(word)
 
-	return(words)
+	return words 
 
 
 def sumFileSize():
@@ -61,7 +61,7 @@ def sumFileSize():
 def map_function(filename):
 	"""
 	Takes a list of sentences,splits, and sums up words per sentence
-    	:param words: filename
+    :param filename: a single filename
    	"""
 
 	sentences = get_data(filename)
@@ -76,13 +76,14 @@ def map_function(filename):
 				wordCount[word] = 1
 
 	print("Done Analyzing %s" % (filename))
-	return(wordCount)
+	
+	return wordCount
 
 def reduce_function(dict_list):
 	"""
 	This function reduces a dictionary with mapped keys/values by summing values
-    	:param words: List of words
-    	"""
+    :param words: List of words
+    """
 	d = {}
 
 	for entry in dict_list:
@@ -93,7 +94,7 @@ def reduce_function(dict_list):
 			except KeyError:
 				d[k] = v
 	
-	return(d)
+	return d 
 
 def show_items(mapreduce):
 	"""
@@ -113,16 +114,21 @@ if __name__ == '__main__':
 
 	#Single-thread
 	
-	# map = map_function(get_filenames())
-	# mr = reduce_function(map)
-	# show_items(mr)
+	files = get_filenames()
+
+	for filename in files: 
+		mapr = map_function(filename)
+	
+	mr = reduce_function(mapr)
+	
+	show_items(mr)
 
 	#Multiprocessing
 
-	files = get_filenames()
-	pool= Pool(processes=5) 
-	result_set = pool.map(map_function, files, chunksize=30) #processing an iterated list of files
+	# files = get_filenames()
+	# pool= Pool(processes=5) 
+	# result_set = pool.map(map_function, files, chunksize=30) #processing an iterated list of files
 
-	show_items(reduce_function(result_set))
+	# show_items(reduce_function(result_set))
 
 	
