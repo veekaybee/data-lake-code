@@ -28,16 +28,17 @@ def get_filenames():
 
 def get_data(filename):
 	"""
-	Pre-processes data in filename by stripping lines and commas out of words
-	:param a given file
+	Pre-processes data in filename
+	Strips lines, splits spaces, and lower-cases words
+	:param text file
     """
 
 	words = []
 
 	with open(filename,'r') as f: 
 		for line in f:
-			word = line.strip('\n').strip('\r').strip('.').strip(',').split(' ')
-			words.append(word)
+			list_of_words = line.strip('\n').strip('\r').strip('.').strip(',').split(' ')
+			words.append([word.lower() for word in list_of_words])
 
 	return words 
 
@@ -84,17 +85,20 @@ def reduce_function(dict_list):
 	This function reduces a dictionary with mapped keys/values by summing values
     :param words: List of words
     """
-	d = {}
+	reduced_dict = {}
 
 
 	print("merging dictionary...")
-	for k, v in dict_list.items():
-		try:
-			d[k] += v
-		except KeyError:
-			d[k] = v
-	
-	return d 
+
+	for d in dict_list:
+		for k, v in d.items():
+			try:
+				reduced_dict[k] += v
+			except KeyError:
+				reduced_dict[k] = v
+
+	return reduced_dict
+
 
 def show_items(mapreduce):
 	"""
@@ -107,6 +111,7 @@ def show_items(mapreduce):
 	for i in sorted_items:
 		print("'%s' - %i" % i)
 
+
 if __name__ == '__main__':
 	sumFileSize()
 
@@ -114,24 +119,24 @@ if __name__ == '__main__':
 
 	#Single-thread
 
-	append_dict = {}
+	# append_dict = {}
 	
-	files = get_filenames()
+	# files = get_filenames()
 
-	for filename in files: 
-		mapr = map_function(filename)
-		append_dict.update(mapr)
+	# for filename in files: 
+	# 	mapr = map_function(filename)
+	# 	append_dict.update(mapr)
+
 	
-	mr = reduce_function(mapr)
+	# mr = reduce_function(mapr)
 	
-	show_items(mr)
+	# show_items(mr)
 
 	#Multiprocessing
 
-	# files = get_filenames()
-	# pool= Pool(processes=5) 
-	# result_set = pool.map(map_function, files, chunksize=30) #processing an iterated list of files
-
-	# show_items(reduce_function(result_set))
+	files = get_filenames()
+	pool= Pool(processes=5) 
+	result_set = pool.map(map_function, files, chunksize=30) #processing an iterated list of files
+	show_items(reduce_function(result_set))
 
 	
