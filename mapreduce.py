@@ -82,7 +82,7 @@ def map_function(filename):
 
 def reduce_function(dict_list):
 	"""
-	This function reduces a dictionary with mapped keys/values by summing values
+	This function reduces a list of dicts
     :param words: List of words
     """
 	reduced_dict = {}
@@ -119,24 +119,23 @@ if __name__ == '__main__':
 
 	#Single-thread
 
-	# append_dict = {}
+	word_list = []
 	
-	# files = get_filenames()
+	files = get_filenames()
 
-	# for filename in files: 
-	# 	mapr = map_function(filename)
-	# 	append_dict.update(mapr)
+	for filename in files: 
+		mapr = map_function(filename)
+		word_list.append(mapr)
 
+	mr = reduce_function(word_list)
 	
-	# mr = reduce_function(mapr)
-	
-	# show_items(mr)
+	show_items(mr)
 
 	#Multiprocessing
 
-	files = get_filenames()
-	pool= Pool(processes=5) 
-	result_set = pool.map(map_function, files, chunksize=30) #processing an iterated list of files
-	show_items(reduce_function(result_set))
+	# files = get_filenames()
+	# pool= Pool(processes=5) 
+	# result_set = pool.map(map_function, files, chunksize=30) #processing an iterated list of files
+	# show_items(reduce_function(result_set))
 
 	
